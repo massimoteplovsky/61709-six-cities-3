@@ -1,7 +1,7 @@
 import React from 'react';
 import {OfferPropType} from '../../prop-validator/prop-validator';
 
-const Main = ({offersCount, offers}) => {
+const Main = ({offersCount, offers, onTitleClick}) => {
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -95,7 +95,6 @@ const Main = ({offersCount, offers}) => {
               </form>
               <div className="cities__places-list places__list tabs__content">
                 {
-                  // eslint-disable-next-line react/prop-types
                   offers.map((offer, index) => {
                     return (
                       <article key={offer + index} className="cities__place-card place-card">
@@ -126,7 +125,7 @@ const Main = ({offersCount, offers}) => {
                               <span className="visually-hidden">Rating</span>
                             </div>
                           </div>
-                          <h2 className="place-card__name">
+                          <h2 className="place-card__name" onClick={onTitleClick}>
                             <a href="#">{offer}</a>
                           </h2>
                           <p className="place-card__type">Apartment</p>
@@ -150,7 +149,8 @@ const Main = ({offersCount, offers}) => {
 
 Main.propTypes = {
   offers: OfferPropType.OFFERS,
-  offersCount: OfferPropType.OFFERS_COUNT
+  offersCount: OfferPropType.OFFERS_COUNT,
+  onTitleClick: OfferPropType.TITLE_CLICK
 };
 
 export default Main;
