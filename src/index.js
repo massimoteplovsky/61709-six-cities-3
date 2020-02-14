@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app.jsx';
+import offers from './mocks/offers';
 
 const offersCount = 5;
-const offers = [`Beautiful & luxurious apartment at great location`, `Wood and stone place`];
 
 ReactDOM.render(
     <App

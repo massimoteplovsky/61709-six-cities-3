@@ -2,7 +2,10 @@ import React from 'react';
 import {OfferPropType} from '../../prop-validator/prop-validator';
 import Main from '../main/main.jsx';
 
-const handleTitleClick = () => {}
+const handleTitleClick = (event) => {
+  event.preventDefault();
+  console.log(`clicked`);
+};
 
 const App = ({offersCount, offers}) => {
   return (
