@@ -1,8 +1,14 @@
 import React from 'react';
-import {OfferPropType} from '../../prop-validator/prop-validator';
+import {PropTypes} from '../../prop-validator/prop-validator';
 import OfferList from '../offer-list/offer-list.jsx';
 
 const Main = ({offersCount, offers, onTitleClick}) => {
+  let sortIsOpen = false;
+
+  const _handleSortClick = () => {
+    sortIsOpen = !sortIsOpen;
+  }
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -73,7 +79,7 @@ const Main = ({offersCount, offers, onTitleClick}) => {
               <b className="places__found">{offersCount} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex="0">
+                <span className="places__sorting-type" tabIndex="0" onClick={_handleSortClick()}>
                   Popular
                   <svg className="places__sorting-arrow" width="7" height="4">
                     <use xlinkHref="#icon-arrow-select"></use>
@@ -110,9 +116,9 @@ const Main = ({offersCount, offers, onTitleClick}) => {
 };
 
 Main.propTypes = {
-  offers: OfferPropType.OFFERS,
-  offersCount: OfferPropType.OFFERS_COUNT,
-  onTitleClick: OfferPropType.TITLE_CLICK
+  offers: PropTypes.OFFER_PROPTYPE.OFFERS,
+  offersCount: PropTypes.OFFER_PROPTYPE.OFFERS_COUNT,
+  onTitleClick: PropTypes.OFFER_PROPTYPE.TITLE_CLICK
 };
 
 export default Main;

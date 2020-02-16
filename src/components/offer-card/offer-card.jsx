@@ -1,5 +1,6 @@
 import React from 'react';
-import {OfferPropType} from '../../prop-validator/prop-validator';
+import {PropTypes} from '../../prop-validator/prop-validator';
+import {makeRating} from '../../helpers';
 
 const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
   const {
@@ -11,11 +12,6 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
     type
   } = offer;
 
-  const makeRating = (numericRating) => {
-    const delimetr = numericRating - Math.floor(numericRating) >= 0.5 ? Math.ceil(numericRating) : Math.floor(numericRating);
-    return 100 / 5 * delimetr;
-  };
-
   return (
     <article
       key={id}
@@ -26,7 +22,7 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
         <span>Premium</span>
       </div>
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+        <a href="#" onClick={(event) => onTitleClick(event, id)}>
           <img className="place-card__image" src={img} width="260" height="200" alt="Place image"/>
         </a>
       </div>
@@ -49,7 +45,7 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
-        <h2 className="place-card__name" onClick={(event) => onTitleClick(event)}>
+        <h2 className="place-card__name" onClick={(event) => onTitleClick(event, id)}>
           <a href="#">{title}</a>
         </h2>
         <p className="place-card__type">{type}</p>
@@ -59,10 +55,10 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
 };
 
 OfferCard.propTypes = {
-  offer: OfferPropType.OFFER,
-  activeOffer: OfferPropType.ACTIVE_OFFER,
-  onTitleClick: OfferPropType.TITLE_CLICK,
-  onMouseEnter: OfferPropType.MOUSE_ENTER
+  offer: PropTypes.OFFER_PROPTYPE.OFFER,
+  activeOffer: PropTypes.OFFER_PROPTYPE.ACTIVE_OFFER,
+  onTitleClick: PropTypes.OFFER_PROPTYPE.TITLE_CLICK,
+  onMouseEnter: PropTypes.OFFER_PROPTYPE.MOUSE_ENTER
 };
 
 export default OfferCard;
