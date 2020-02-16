@@ -4,7 +4,7 @@ export default [
     title: `Incredable place to stay`,
     img: `img/apartment-01.jpg`,
     price: 200,
-    type: `apartment`,
+    type: `Apartments`,
     rating: 4.5
   },
   {
@@ -12,7 +12,7 @@ export default [
     title: `White sand`,
     img: `img/apartment-01.jpg`,
     price: 345,
-    type: `hotel`,
+    type: `Hotel`,
     rating: 5
   },
   {
@@ -20,7 +20,7 @@ export default [
     title: `Black tarantula`,
     img: `img/apartment-01.jpg`,
     price: 150,
-    type: `room`,
+    type: `Room`,
     rating: 2.5
   },
   {
@@ -28,7 +28,7 @@ export default [
     title: `Karacum`,
     img: `img/apartment-01.jpg`,
     price: 210,
-    type: `house`,
+    type: `House`,
     rating: 3.8
   },
 ];
