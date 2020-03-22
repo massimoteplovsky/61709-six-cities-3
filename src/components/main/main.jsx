@@ -1,13 +1,15 @@
 import React from 'react';
-import {PropTypes} from '../../prop-validator/prop-validator';
+import {PropValidator} from '../../prop-validator/prop-validator';
+import {PropTypes} from "prop-types";
 import OfferList from '../offer-list/offer-list.jsx';
+import Map from "../map/map.jsx";
 
 const Main = ({offersCount, offers, onTitleClick}) => {
   let sortIsOpen = false;
 
   const _handleSortClick = () => {
     sortIsOpen = !sortIsOpen;
-  }
+  };
 
   return (
     <div className="page page--gray page--main">
@@ -106,7 +108,7 @@ const Main = ({offersCount, offers, onTitleClick}) => {
               />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map offers={offers}/>
             </div>
           </div>
         </div>
@@ -116,9 +118,9 @@ const Main = ({offersCount, offers, onTitleClick}) => {
 };
 
 Main.propTypes = {
-  offers: PropTypes.OFFER_PROPTYPE.OFFERS,
-  offersCount: PropTypes.OFFER_PROPTYPE.OFFERS_COUNT,
-  onTitleClick: PropTypes.OFFER_PROPTYPE.TITLE_CLICK
+  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
+  offersCount: PropTypes.number.isRequired,
+  onTitleClick: PropTypes.func.isRequired
 };
 
 export default Main;

@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import OfferCard from '../offer-card/offer-card.jsx';
-import {PropTypes} from '../../prop-validator/prop-validator';
+import {PropValidator} from '../../prop-validator/prop-validator';
+import {PropTypes} from "prop-types";
 
 class OfferList extends PureComponent {
   constructor(props) {
@@ -41,8 +42,8 @@ class OfferList extends PureComponent {
 }
 
 OfferList.propTypes = {
-  offers: PropTypes.OFFER_PROPTYPE.OFFERS,
-  onTitleClick: PropTypes.OFFER_PROPTYPE.TITLE_CLICK
+  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
+  onTitleClick: PropTypes.func.isRequired
 };
 
 export default OfferList;

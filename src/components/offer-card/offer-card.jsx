@@ -1,5 +1,6 @@
 import React from 'react';
-import {PropTypes} from '../../prop-validator/prop-validator';
+import {PropValidator} from '../../prop-validator/prop-validator.js';
+import {PropTypes} from "prop-types";
 import {makeRating} from '../../helpers';
 
 const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
@@ -55,10 +56,10 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
 };
 
 OfferCard.propTypes = {
-  offer: PropTypes.OFFER_PROPTYPE.OFFER,
-  activeOffer: PropTypes.OFFER_PROPTYPE.ACTIVE_OFFER,
-  onTitleClick: PropTypes.OFFER_PROPTYPE.TITLE_CLICK,
-  onMouseEnter: PropTypes.OFFER_PROPTYPE.MOUSE_ENTER
+  offer: PropValidator.OFFER,
+  activeOffer: PropTypes.number.isRequired,
+  onTitleClick: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired
 };
 
 export default OfferCard;

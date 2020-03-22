@@ -1,5 +1,6 @@
 import React from 'react';
-import {PropTypes} from '../../prop-validator/prop-validator';
+import {PropValidator} from '../../prop-validator/prop-validator.js';
+import {PropTypes} from "prop-types";
 import {makeRating} from '../../helpers';
 
 const Offer = ({offer}) => {
@@ -10,7 +11,7 @@ const Offer = ({offer}) => {
     type,
     rating
   } = offer;
-  console.log(offer);
+
   return (
     <div className="page">
       <header className="header">
@@ -337,7 +338,7 @@ const Offer = ({offer}) => {
 };
 
 Offer.propTypes = {
-  offer: PropTypes.OFFER_PROPTYPE.OFFER
+  offer: PropValidator.OFFER
 };
 
 export default Offer;

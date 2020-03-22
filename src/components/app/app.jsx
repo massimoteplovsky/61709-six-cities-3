@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Switch, Route, BrowserRouter as Router} from 'react-router-dom';
-import {PropTypes} from '../../prop-validator/prop-validator';
+import {PropValidator} from '../../prop-validator/prop-validator.js';
+import {PropTypes} from "prop-types";
 import Offer from '../offer/offer.jsx';
 import Main from '../main/main.jsx';
 
@@ -57,8 +58,8 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  offers: PropTypes.OFFER_PROPTYPE.OFFERS,
-  offersCount: PropTypes.OFFER_PROPTYPE.OFFERS_COUNT
+  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
+  offersCount: PropTypes.number.isRequired
 };
 
 export default App;
