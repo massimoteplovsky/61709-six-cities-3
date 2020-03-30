@@ -3,7 +3,8 @@ import {
   GET_CITY_OFFERS,
   ADD_REVIEWS,
   ADD_NEIGHBOUR_PLACES,
-  CHANGE_ACTUAL_OFFER
+  CHANGE_ACTUAL_OFFER,
+  CHANGE_ACTUAL_FILTER
 } from "../type/offers";
 import {makeCityList} from "../../helpers";
 
@@ -27,10 +28,15 @@ const saveNeighbourPlacesToState = (places) => ({
   payload: places
 });
 
+export const changeActualFilter = (filter) => ({
+  type: CHANGE_ACTUAL_FILTER,
+  payload: filter
+});
+
 export const changeActualOffer = (id) => ({
   type: CHANGE_ACTUAL_OFFER,
   payload: id
-})
+});
 
 export const loadAllOffers = () => (dispatch, _, api) => {
   return api.get(`/hotels`)

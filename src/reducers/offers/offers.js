@@ -3,11 +3,13 @@ import {
   GET_CITY_OFFERS,
   ADD_REVIEWS,
   ADD_NEIGHBOUR_PLACES,
-  CHANGE_ACTUAL_OFFER
+  CHANGE_ACTUAL_OFFER,
+  CHANGE_ACTUAL_FILTER
 } from "../../actions/type/offers.js";
 
 const initialState = {
   actualCity: ``,
+  actualFilter: `Popular`,
   actualOffer: -1,
   offers: [],
   reviews: [],
@@ -21,6 +23,12 @@ export const offers = (state = initialState, {type, payload}) => {
           {},
           state,
           {actualCity: payload}
+      );
+    case CHANGE_ACTUAL_FILTER:
+      return Object.assign(
+          {},
+          state,
+          {actualFilter: payload}
       );
     case CHANGE_ACTUAL_OFFER:
       return Object.assign(
