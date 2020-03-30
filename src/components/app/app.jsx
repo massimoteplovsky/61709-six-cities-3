@@ -1,56 +1,42 @@
 import React, {PureComponent} from 'react';
-import {Switch, Route, BrowserRouter as Router} from 'react-router-dom';
-import {PropValidator} from '../../prop-validator/prop-validator.js';
+import {Switch, Route, Router} from 'react-router-dom';
 import {PropTypes} from "prop-types";
+import {connect} from "react-redux";
+import {loadAllOffers} from '../../actions/action-creators/offers.js';
+import history from "../../history.js";
 import Offer from '../offer/offer.jsx';
 import Main from '../main/main.jsx';
+import Loading from "../loading/loading.jsx";
+import withLoading from "../../hoc/with-loading/with-loading.js";
 
 class App extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      currentOffer: -1
-    };
-
-    this._renderApp = this._renderApp.bind(this);
-    this.handleTitleClick = this.handleTitleClick.bind(this);
   }
 
-  _renderApp() {
-    const {offers} = this.props;
-    const {currentOffer} = this.state;
-    const offer = offers.find((item) => item.id === currentOffer);
+  componentDidMount() {
+    const {
+      onChangeLoadingStatus,
+      onLoadData
+    } = this.props;
 
-    if (offer) {
-      return <Offer offer={offer}/>;
-    }
-
-    return (
-      <Main
-        offersCount={offers.length}
-        offers={offers}
-        onTitleClick={this.handleTitleClick}
-      />
-    );
-  }
-
-  handleTitleClick(event, offerID) {
-    event.preventDefault();
-    this.setState({currentOffer: offerID});
+    onLoadData().then(() => {
+      onChangeLoadingStatus(false);
+    });
   }
 
   render() {
-    const {offers} = this.props;
+    const {isLoading} = this.props;
+
+    if (isLoading) {
+      return <Loading/>;
+    }
 
     return (
-      <Router>
+      <Router history={history}>
         <Switch>
-          <Route exact path="/">
-            {this._renderApp()}
-          </Route>
-          <Route exact path="/dev-component">
-            <Offer offer={offers[0]}/>
-          </Route>
+          <Route exact path="/" component={Main} />
+          <Route exact path="/offer/:id" component={Offer} />
         </Switch>
       </Router>
     );
@@ -58,8 +44,17 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  offersCount: PropTypes.number.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  onChangeLoadingStatus: PropTypes.func.isRequired,
+  onLoadData: PropTypes.func.isRequired
 };
 
-export default App;
+const mapDispatchToProps = (dispatch) => ({
+  onLoadData() {
+    return Promise.all([
+      dispatch(loadAllOffers())
+    ]);
+  }
+});
+
+export default connect(null, mapDispatchToProps)(withLoading(App));

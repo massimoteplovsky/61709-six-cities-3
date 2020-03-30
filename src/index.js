@@ -1,14 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/app/app.jsx';
-import {offers} from './mocks/offers.js';
-
-const offersCount = 5;
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/app/app.jsx";
+import {Provider} from "react-redux";
+import store from "./store.js";
 
 ReactDOM.render(
-    <App
-      offersCount={offersCount}
-      offers={offers}
-    />,
+    <Provider store={store}>
+      <App/>
+    </Provider>,
     document.querySelector(`#root`)
 );

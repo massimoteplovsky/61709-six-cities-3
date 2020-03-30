@@ -1,36 +1,66 @@
 import React from 'react';
 import {PropValidator} from '../../prop-validator/prop-validator.js';
 import {PropTypes} from "prop-types";
+import {Link} from "react-router-dom";
 import {makeRating} from '../../helpers';
+import {connect} from "react-redux";
+import {changeActualOffer} from "../../actions/action-creators/offers.js";
 
-const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
+const OfferCard = ({
+  offer,
+  activeIndex,
+  onChangeActiveItem,
+  onChangeActualOffer,
+  isNeighbourMode
+}) => {
   const {
     id,
     title,
-    img,
+    isPremium,
+    previewImage,
     price,
     rating,
     type
   } = offer;
 
+  const handleChangeActualOffer = (offerID) => {
+    if (!isNeighbourMode) {
+      onChangeActualOffer(offerID);
+    }
+  };
+
   return (
     <article
-      key={id}
-      className={`cities__place-card place-card ${activeOffer === id ? `active` : ``}`}
-      onMouseEnter={() => onMouseEnter(id)}
+      className={`cities__place-card place-card ${activeIndex === id ? `active` : ``}`}
+      onMouseEnter={() => {
+        onChangeActiveItem(id);
+        handleChangeActualOffer(id);
+      }}
+      onMouseLeave={() => {
+        onChangeActiveItem(-1);
+        handleChangeActualOffer(-1);
+      }}
     >
-      <div className="place-card__mark">
-        <span>Premium</span>
-      </div>
+      {
+        isPremium && <div className="place-card__mark">
+          <span>Premium</span>
+        </div>
+      }
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#" onClick={(event) => onTitleClick(event, id)}>
-          <img className="place-card__image" src={img} width="260" height="200" alt="Place image"/>
-        </a>
+        <Link to={`/offer/${id}`}>
+          <img
+            className="place-card__image"
+            src={previewImage}
+            width="260"
+            height="200"
+            alt={title}
+          />
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{price}</b>
+            <b className="place-card__price-value">&euro;{price}&nbsp;</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className="place-card__bookmark-button button" type="button">
@@ -46,8 +76,8 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
-        <h2 className="place-card__name" onClick={(event) => onTitleClick(event, id)}>
-          <a href="#">{title}</a>
+        <h2 className="place-card__name">
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
@@ -57,9 +87,16 @@ const OfferCard = ({offer, activeOffer, onTitleClick, onMouseEnter}) => {
 
 OfferCard.propTypes = {
   offer: PropValidator.OFFER,
-  activeOffer: PropTypes.number.isRequired,
-  onTitleClick: PropTypes.func.isRequired,
-  onMouseEnter: PropTypes.func.isRequired
+  activeIndex: PropTypes.number.isRequired,
+  onChangeActiveItem: PropTypes.func.isRequired,
+  isNeighbourMode: PropTypes.bool.isRequired,
+  onChangeActualOffer: PropTypes.func.isRequired
 };
 
-export default OfferCard;
+const mapDispatchToProps = (dispatch) => ({
+  onChangeActualOffer(offerID) {
+    dispatch(changeActualOffer(offerID));
+  }
+});
+
+export default connect(null, mapDispatchToProps)(OfferCard);
