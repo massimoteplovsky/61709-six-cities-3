@@ -8,6 +8,7 @@ import Map from "../map/map.jsx";
 import CityList from "../city-list/city-list.jsx";
 import Header from "../header/header.jsx";
 import Sorting from "../sorting/sorting.jsx";
+import MainEmpty from "../main-empty/main-empty.jsx";
 import withActiveItem from "../../hoc/with-active-item/with-active-item.js";
 import withOpenItem from "../../hoc/with-open-item/with-open-item.js";
 
@@ -23,6 +24,10 @@ const Main = ({
   onToggleOpenMode
 }) => {
 
+  if (filteredOffers.length === 0) {
+    return <MainEmpty />;
+  }
+
   return (
     <div className="page page--gray page--main">
       <Header/>
@@ -34,14 +39,10 @@ const Main = ({
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">
-                {
-                  filteredOffers.length > 0 ?
-                    `${filteredOffers.length} places to stay in ${actualCity}`
-                    :
-                    `No places to stay available`}
+                {`${filteredOffers.length} places to stay in ${actualCity}`}
               </b>
               <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
+                <span className="places__sorting-caption">Sort by </span>
                 <span
                   className="places__sorting-type"
                   tabIndex="0"
@@ -79,7 +80,10 @@ Main.propTypes = {
   offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
   actualCity: PropTypes.string.isRequired,
   filteredOffers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  actualOffer: PropTypes.number.isRequired
+  actualOffer: PropTypes.number.isRequired,
+  actualFilter: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggleOpenMode: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
