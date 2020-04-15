@@ -9,10 +9,7 @@ import CityList from "../city-list/city-list.jsx";
 import Header from "../header/header.jsx";
 import Sorting from "../sorting/sorting.jsx";
 import MainEmpty from "../main-empty/main-empty.jsx";
-import withActiveItem from "../../hoc/with-active-item/with-active-item.js";
 import withOpenItem from "../../hoc/with-open-item/with-open-item.js";
-
-const WrappedCityList = withActiveItem(CityList);
 
 const Main = ({
   offers,
@@ -33,7 +30,7 @@ const Main = ({
       <Header/>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <WrappedCityList offers={offers}/>
+        <CityList offers={offers}/>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">

@@ -6,6 +6,26 @@ export const makeCityList = (offers) => {
   return [...new Set(offers.map(({city}) => city.name))];
 };
 
+export const makeTitle = (rating) => {
+  if (rating === 1) {
+    return `terribly`;
+  }
+
+  if (rating === 2) {
+    return `badly`;
+  }
+
+  if (rating === 3) {
+    return `not bad`;
+  }
+
+  if (rating === 4) {
+    return `good`;
+  }
+
+  return `perfect`;
+};
+
 export const shuffleArray = (arr) => {
   let arrayLength = arr.length;
   let temp;
@@ -59,9 +79,4 @@ export const convertObjectKeys = (obj) => {
   }
 
   return obj;
-};
-
-export const validateEmail = (email) => {
-  const regularExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return regularExp.test(email);
 };

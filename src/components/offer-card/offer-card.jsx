@@ -4,14 +4,15 @@ import {PropTypes} from "prop-types";
 import {Link} from "react-router-dom";
 import {makeRating} from '../../helpers';
 import {connect} from "react-redux";
-import {changeActualOffer} from "../../actions/action-creators/offers.js";
+import {changeActualOffer, changeOfferFavoriteStatus} from "../../actions/action-creators/offers.js";
 
 const OfferCard = ({
   offer,
   activeIndex,
   onChangeActiveItem,
   onChangeActualOffer,
-  isNeighbourMode
+  isNeighbourMode,
+  onChangeOfferFavoriteStatus
 }) => {
   const {
     id,
@@ -20,7 +21,8 @@ const OfferCard = ({
     previewImage,
     price,
     rating,
-    type
+    type,
+    isFavorite
   } = offer;
 
   const handleChangeActualOffer = (offerID) => {
@@ -42,7 +44,9 @@ const OfferCard = ({
       }}
     >
       {
-        isPremium && <div className="place-card__mark">
+        isPremium
+          &&
+        <div className="place-card__mark">
           <span>Premium</span>
         </div>
       }
@@ -63,7 +67,11 @@ const OfferCard = ({
             <b className="place-card__price-value">&euro;{price}&nbsp;</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button
+            className={`place-card__bookmark-button ${isFavorite ? `place-card__bookmark-button--active` : ``} button`}
+            type="button"
+            onClick={() => onChangeOfferFavoriteStatus(id, isFavorite ? 0 : 1)}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
@@ -90,12 +98,16 @@ OfferCard.propTypes = {
   activeIndex: PropTypes.number.isRequired,
   onChangeActiveItem: PropTypes.func.isRequired,
   isNeighbourMode: PropTypes.bool.isRequired,
-  onChangeActualOffer: PropTypes.func.isRequired
+  onChangeActualOffer: PropTypes.func.isRequired,
+  onChangeOfferFavoriteStatus: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeActualOffer(offerID) {
     dispatch(changeActualOffer(offerID));
+  },
+  onChangeOfferFavoriteStatus(offerID, status) {
+    dispatch(changeOfferFavoriteStatus(offerID, status));
   }
 });
 

@@ -1,13 +1,14 @@
 import axios from "axios";
 import {convertObjectKeys} from "./helpers.js";
-//import history from "./history.js";
+import history from "./history.js";
 
 const Errors = {
-  REQUEST_ERRORS: [400, 404, 500],
+  REQUEST_ERRORS: [400, 404],
+  SERVER_ERROR: 500,
   NO_AUTHORIZED: 401
 };
 
-export const createAPI = (onRequestFail, onUnauthorized) => {
+export const createAPI = (onUnauthorized, onRequestFail) => {
   const api = axios.create({
     baseURL: `https://htmlacademy-react-3.appspot.com/six-cities`,
     timeout: 5000,
@@ -19,16 +20,19 @@ export const createAPI = (onRequestFail, onUnauthorized) => {
   };
 
   const onFail = (err) => {
-    const {response} = err;
+    const {response, request} = err;
 
-    if (!response || Errors.REQUEST_ERRORS.includes(response.status)) {
-      // onRequestFail();
+    if (!response || Errors.REQUEST_ERRORS.includes(response.status) || response.status >= Errors.SERVER_ERROR) {
+      onRequestFail(response.status);
       return err;
     }
 
     if (response.status === Errors.NO_AUTHORIZED) {
-      // onUnauthorized();
-      // history.push(`/login`);
+      onUnauthorized();
+      if (!request.responseURL.includes(`login`)) {
+        history.push(`/signin`);
+      }
+
       return err;
     }
 

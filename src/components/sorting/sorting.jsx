@@ -1,7 +1,9 @@
 import React from "react";
 import {changeActualFilter} from "../../actions/action-creators/offers.js";
-import withActiveItem from "../../hoc/with-active-item/with-active-item.js";
 import {connect} from "react-redux";
+import {PropTypes} from "prop-types";
+import withActiveItem from "../../hoc/with-active-item/with-active-item.js";
+
 
 const sortTypes = [
   `Popular`,
@@ -39,6 +41,14 @@ const Sorting = ({
       }
     </ul>
   );
+};
+
+Sorting.propTypes = {
+  activeIndex: PropTypes.number.isRequired,
+  onChangeActiveItem: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggleOpenMode: PropTypes.func.isRequired,
+  onChangeActualFilter: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (dispatch) => ({

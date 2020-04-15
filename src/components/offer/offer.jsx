@@ -4,13 +4,16 @@ import {PropTypes} from "prop-types";
 import {connect} from "react-redux";
 import {makeRating, shuffleArray} from '../../helpers';
 import {getOffer, getOfferReviews, getNeighbourPlaces} from '../../selectors/offers.js';
-import {loadOfferReviews, loadNeighbourPlaces} from "../../actions/action-creators/offers.js";
+import {getAuthStatus} from "../../selectors/user.js";
+import {loadOfferReviews, loadNeighbourPlaces, changeOfferFavoriteStatus} from "../../actions/action-creators/offers.js";
 import Header from "../header/header.jsx";
 import Reviews from "../reviews/reviews.jsx";
 import OfferList from "../offer-list/offer-list.jsx";
 import Map from "../map/map.jsx";
 import Loading from "../loading/loading.jsx";
+import Footer from "../footer/footer.jsx";
 import withLoading from "../../hoc/with-loading/with-loading.js";
+import history from "../../history.js";
 
 class Offer extends PureComponent {
   constructor(props) {
@@ -21,12 +24,16 @@ class Offer extends PureComponent {
     const {
       onChangeLoadingStatus,
       onLoadData,
-      offer: {
-        id
-      }
+      offer
     } = this.props;
 
-    onLoadData(id).then(() => onChangeLoadingStatus(false));
+    if (!offer) {
+      history.push(`/`);
+      return null;
+    }
+
+    onLoadData(offer.id).then(() => onChangeLoadingStatus(false));
+    return true;
   }
 
   componentDidUpdate(prevProps) {
@@ -50,7 +57,9 @@ class Offer extends PureComponent {
       offer,
       isLoading,
       reviews,
-      neighbourPlaces
+      neighbourPlaces,
+      authStatus,
+      onChangeOfferFavoriteStatus
     } = this.props;
 
     if (isLoading) {
@@ -58,6 +67,7 @@ class Offer extends PureComponent {
     }
 
     const {
+      id,
       images,
       isPremium,
       title,
@@ -68,6 +78,7 @@ class Offer extends PureComponent {
       type,
       rating,
       description,
+      isFavorite,
       host: {
         name,
         avatarUrl,
@@ -113,8 +124,12 @@ class Offer extends PureComponent {
                   <h1 className="property__name">
                     {title}
                   </h1>
-                  <button className="property__bookmark-button button" type="button">
-                    <svg className="property__bookmark-icon" width="31" height="33">
+                  <button
+                    className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button`}
+                    type="button"
+                    onClick={() => onChangeOfferFavoriteStatus(id, isFavorite ? 0 : 1)}
+                  >
+                    <svg className="place-card__bookmark-icon" width="31" height="33">
                       <use xlinkHref="#icon-bookmark"></use>
                     </svg>
                     <span className="visually-hidden">To bookmarks</span>
@@ -178,7 +193,11 @@ class Offer extends PureComponent {
                     </p>
                   </div>
                 </div>
-                <Reviews reviews={reviews}/>
+                <Reviews
+                  reviews={reviews}
+                  authStatus={authStatus}
+                  offerID={offer.id}
+                />
               </div>
             </div>
             <section
@@ -207,6 +226,7 @@ class Offer extends PureComponent {
             </section>
           </div>
         </main>
+        <Footer/>
       </div>
     );
   }
@@ -219,13 +239,16 @@ Offer.propTypes = {
   neighbourPlaces: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
   isLoading: PropTypes.bool.isRequired,
   onChangeLoadingStatus: PropTypes.func.isRequired,
-  onLoadData: PropTypes.func.isRequired
+  onLoadData: PropTypes.func.isRequired,
+  authStatus: PropTypes.string.isRequired,
+  onChangeOfferFavoriteStatus: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
   offer: getOffer(state, ownProps.match.params.id),
   reviews: getOfferReviews(state),
-  neighbourPlaces: getNeighbourPlaces(state)
+  neighbourPlaces: getNeighbourPlaces(state),
+  authStatus: getAuthStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -234,6 +257,9 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(loadOfferReviews(offerID)),
       dispatch(loadNeighbourPlaces(offerID))
     ]);
+  },
+  onChangeOfferFavoriteStatus(offerID, status) {
+    dispatch(changeOfferFavoriteStatus(offerID, status));
   }
 });
 

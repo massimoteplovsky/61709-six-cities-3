@@ -4,9 +4,7 @@ import {PropTypes} from "prop-types";
 const CityListItem = ({
   city,
   isActive,
-  index,
   onChangeActualCity,
-  onChangeActiveItem
 }) => {
   return (
     <li className="locations__item">
@@ -15,7 +13,6 @@ const CityListItem = ({
         href="#"
         onClick={(event) => {
           event.preventDefault();
-          onChangeActiveItem(index);
           onChangeActualCity(city);
         }}
       >
@@ -27,10 +24,8 @@ const CityListItem = ({
 
 CityListItem.propTypes = {
   city: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
   isActive: PropTypes.bool.isRequired,
-  onChangeActualCity: PropTypes.func.isRequired,
-  onChangeActiveItem: PropTypes.func.isRequired
+  onChangeActualCity: PropTypes.func.isRequired
 };
 
 export default CityListItem;

@@ -8,6 +8,10 @@ export const getAllOffers = (state) => {
   return state.offers.offers;
 };
 
+export const getFavoriteOffers = (state) => {
+  return state.offers.favoriteOffers;
+};
+
 export const getOfferReviews = (state) => {
   return state.offers.reviews;
 };
@@ -21,8 +25,11 @@ export const getActualFilter = (state) => {
 };
 
 export const getOffer = (state, offerID) => {
-  const offers = state.offers.offers;
-  return offers.find((offer) => offer.id === Number(offerID));
+  const offer = state.offers.offers.find((offerItem) => offerItem.id === Number(offerID));
+  if (!offer) {
+    return null;
+  }
+  return offer;
 };
 
 const sortByFilter = (offers, filter) => {

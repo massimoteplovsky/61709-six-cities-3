@@ -5,15 +5,14 @@ import {connect} from "react-redux";
 import {makeCityList} from "../../helpers.js";
 import {changeActualCity} from "../../actions/action-creators/offers.js";
 import CityListItem from "../city-list-item/city-list-item.js";
+import {getActualCity} from "../../selectors/offers.js";
 
 
 const CityList = ({
   offers,
-  activeIndex,
+  actualCity,
   onChangeActualCity,
-  onChangeActiveItem
 }) => {
-
   const cities = makeCityList(offers);
 
   return (
@@ -26,10 +25,8 @@ const CityList = ({
                 <CityListItem
                   key={`${city}-${i}`}
                   city={city}
-                  isActive={activeIndex === i}
-                  index={i}
+                  isActive={actualCity === city}
                   onChangeActualCity={onChangeActualCity}
-                  onChangeActiveItem={onChangeActiveItem}
                 />
               );
             })
@@ -43,9 +40,12 @@ const CityList = ({
 CityList.propTypes = {
   offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
   onChangeActualCity: PropTypes.func.isRequired,
-  activeIndex: PropTypes.number.isRequired,
-  onChangeActiveItem: PropTypes.func.isRequired
+  actualCity: PropTypes.string.isRequired
 };
+
+const mapStateToProps = (state) => ({
+  actualCity: getActualCity(state)
+});
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -55,4 +55,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(CityList);
+export default connect(mapStateToProps, mapDispatchToProps)(CityList);
