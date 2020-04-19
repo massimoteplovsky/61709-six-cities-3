@@ -1,31 +1,32 @@
-import React from "react";
+import * as React from "react";
 import {connect} from "react-redux";
-import {PropTypes} from "prop-types";
 import {getAuthStatus} from "../../selectors/user";
-import {Authorization, ProtectionType} from "../../consts.js";
+import {Authorization, ProtectionType, Routes} from "../../consts";
 import {Redirect} from "react-router-dom";
+
+interface Props {
+  authorizationStatus: string
+}
 
 const withAuth = (Component, protectionType) => {
 
-  const WithAuth = ({authorizationStatus}) => {
+  const WithAuth: React.FC<Props> = (props: Props) => {
+
+    const {authorizationStatus} = props;
 
     if (authorizationStatus === Authorization.AUTH) {
       if (protectionType === ProtectionType.AUTH_USER) {
-        return <Redirect to="/"/>;
+        return <Redirect to={Routes.MAIN}/>;
       }
     } else {
       if (protectionType === ProtectionType.UNAUTH_USER) {
-        return <Redirect to="/signin"/>;
+        return <Redirect to={Routes.SIGN_IN}/>;
       }
     }
 
     return (
       <Component/>
     );
-  };
-
-  WithAuth.propTypes = {
-    authorizationStatus: PropTypes.string.isRequired
   };
 
   const mapStateToProps = (state) => ({

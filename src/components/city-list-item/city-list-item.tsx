@@ -1,11 +1,18 @@
-import React from "react";
-import {PropTypes} from "prop-types";
+import * as React from "react";
 
-const CityListItem = ({
-  city,
-  isActive,
-  onChangeActualCity,
-}) => {
+interface Props {
+  city: string,
+  isActive: boolean,
+  onChangeActualCity(city: string): void
+}
+
+const CityListItem: React.FC<Props> = (props: Props) => {
+  const {
+    city,
+    isActive,
+    onChangeActualCity,
+  } = props;
+
   return (
     <li className="locations__item">
       <a
@@ -20,12 +27,6 @@ const CityListItem = ({
       </a>
     </li>
   );
-};
-
-CityListItem.propTypes = {
-  city: PropTypes.string.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  onChangeActualCity: PropTypes.func.isRequired
 };
 
 export default CityListItem;

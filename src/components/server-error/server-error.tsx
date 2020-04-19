@@ -1,8 +1,18 @@
-import React from "react";
-import {PropTypes} from "prop-types";
+import * as React from "react";
+import {getApplicationStatus} from "../../selectors/application";
 import {connect} from "react-redux";
 
-const ServerError = ({statusCode}) => {
+interface Props {
+  app: {
+    error: boolean,
+    statusCode: number
+  }
+}
+
+const ServerError: React.FC<Props> = (props: Props) => {
+
+  const {app} = props;
+
   return (
     <div className="page" style={{background: `transparent`}}>
       <div
@@ -18,19 +28,15 @@ const ServerError = ({statusCode}) => {
           fontWeight: `bold`,
           marginBottom: `0`
         }}>
-          Server responses with status code: {statusCode}
+          Server responses with status code: {app.statusCode}
         </p>
       </div>
     </div>
   );
 };
 
-ServerError.propTypes = {
-  statusCode: PropTypes.number.isRequired
-};
-
 const mapStateToProps = (state) => ({
-  statusCode: state.application.statusCode
+  app: getApplicationStatus(state)
 });
 
 export default connect(mapStateToProps)(ServerError);

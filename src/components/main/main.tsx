@@ -1,25 +1,36 @@
-import React from 'react';
-import {PropValidator} from '../../prop-validator/prop-validator';
-import {PropTypes} from "prop-types";
+import * as React from "react";
+import {Offer} from '../../prop-validator/prop-validator';
 import {connect} from "react-redux";
-import {getOffersByCity, getAllOffers, getActualCity, getActualFilter} from "../../selectors/offers.js";
-import OfferList from '../offer-list/offer-list.jsx';
-import Map from "../map/map.jsx";
-import CityList from "../city-list/city-list.jsx";
-import Header from "../header/header.jsx";
-import Sorting from "../sorting/sorting.jsx";
-import MainEmpty from "../main-empty/main-empty.jsx";
-import withOpenItem from "../../hoc/with-open-item/with-open-item.js";
+import {getOffersByCity, getAllOffers, getActualCity, getActualFilter} from "../../selectors/offers";
+import OfferList from '../offer-list/offer-list';
+import Map from "../map/map";
+import CityList from "../city-list/city-list";
+import Header from "../header/header";
+import Sorting from "../sorting/sorting";
+import MainEmpty from "../main-empty/main-empty";
+import withOpenItem from "../../hoc/with-open-item/with-open-item";
 
-const Main = ({
-  offers,
-  filteredOffers,
-  actualCity,
-  actualOffer,
-  actualFilter,
-  isOpen,
-  onToggleOpenMode
-}) => {
+interface Props {
+  offers: Offer[]
+  filteredOffers: Offer[],
+  actualCity: string,
+  actualOffer: number,
+  actualFilter: string,
+  isOpen: boolean
+  onToggleOpenMode(isOpen: boolean): void
+}
+
+const Main: React.FC<Props> = (props: Props) => {
+
+  const {
+      offers,
+      filteredOffers,
+      actualCity,
+      actualOffer,
+      actualFilter,
+      isOpen,
+      onToggleOpenMode
+  } = props;
 
   if (filteredOffers.length === 0) {
     return <MainEmpty />;
@@ -42,7 +53,7 @@ const Main = ({
                 <span className="places__sorting-caption">Sort by </span>
                 <span
                   className="places__sorting-type"
-                  tabIndex="0"
+                  tabIndex={0}
                   onClick={() => onToggleOpenMode(!isOpen)}
                 >
                   {actualFilter}
@@ -71,16 +82,6 @@ const Main = ({
       </main>
     </div>
   );
-};
-
-Main.propTypes = {
-  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  actualCity: PropTypes.string.isRequired,
-  filteredOffers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  actualOffer: PropTypes.number.isRequired,
-  actualFilter: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onToggleOpenMode: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({

@@ -1,22 +1,39 @@
-import React from "react";
-import {PropTypes} from "prop-types";
-import Header from "../header/header.jsx";
+import * as React from "react";
+import Header from "../header/header";
 import {connect} from "react-redux";
-import {login} from "../../actions/action-creators/user.js";
-import history from "../../history.js";
-import withForm from "../../hoc/with-form/with-form.js";
-import {changeActualCity} from "../../actions/action-creators/offers.js";
+import {login} from "../../actions/action-creators/user";
+import history from "../../history";
+import withForm from "../../hoc/with-form/with-form";
+import {changeActualCity} from "../../actions/action-creators/offers";
 
-const Signin = ({
-  formError,
-  formErrorData,
-  onFormSubmit,
-  onSendForm,
-  showErrors,
-  addErrorClass,
-  onChangeField,
-  onChangeActualCity
-}) => {
+interface FormData {
+  email: string,
+  password: string
+}
+
+interface Props {
+  formError: boolean,
+  onFormSubmit(event: React.SyntheticEvent, onSendForm: (data: FormData) => void, fields: string[]): void,
+  onSendForm(data: FormData): void,
+  onShowErrors(): React.ReactNode,
+  onAddErrorClass(field: string): void,
+  onChangeField(event: React.SyntheticEvent): void,
+  onChangeActualCity(city: string): void
+}
+
+const Signin: React.FC<Props> = (props: Props) => {
+
+  const {
+    formError,
+    onFormSubmit,
+    onSendForm,
+    onShowErrors,
+    onAddErrorClass,
+    onChangeField,
+    onChangeActualCity
+  } = props;
+
+  const fields = [`email`, `password`];
 
   return (
     <div className="page page--gray page--login">
@@ -35,17 +52,17 @@ const Signin = ({
                   color: `red`
                 }}
               >
-                {showErrors(formErrorData)}
+                {onShowErrors()}
               </div>
             }
             <form
               className="login__form form"
-              onSubmit={(event) => onFormSubmit(event, onSendForm, [`email`, `password`])}
+              onSubmit={(event) => onFormSubmit(event, onSendForm, fields)}
             >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
-                  className={`login__input form__input ${formError ? addErrorClass(`email`) : ``}`}
+                  className={`login__input form__input ${formError ? onAddErrorClass(`email`) : ``}`}
                   type="text"
                   name="email"
                   placeholder="Email"
@@ -55,7 +72,7 @@ const Signin = ({
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input
-                  className={`login__input form__input ${formError ? addErrorClass(`password`) : ``}`}
+                  className={`login__input form__input ${formError ? onAddErrorClass(`password`) : ``}`}
                   type="password"
                   name="password"
                   placeholder="Password"
@@ -83,17 +100,6 @@ const Signin = ({
       </main>
     </div>
   );
-};
-
-Signin.propTypes = {
-  formError: PropTypes.bool.isRequired,
-  formErrorData: PropTypes.array.isRequired,
-  onFormSubmit: PropTypes.func.isRequired,
-  onSendForm: PropTypes.func.isRequired,
-  showErrors: PropTypes.func.isRequired,
-  addErrorClass: PropTypes.func.isRequired,
-  onChangeField: PropTypes.func.isRequired,
-  onChangeActualCity: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({

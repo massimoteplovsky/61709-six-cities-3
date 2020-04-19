@@ -1,19 +1,29 @@
-import React from 'react';
-import {PropValidator} from '../../prop-validator/prop-validator.js';
-import {PropTypes} from "prop-types";
+import * as React from "react";
+import {Offer} from '../../prop-validator/prop-validator';
 import {Link} from "react-router-dom";
 import {makeRating} from '../../helpers';
 import {connect} from "react-redux";
-import {changeActualOffer, changeOfferFavoriteStatus} from "../../actions/action-creators/offers.js";
+import {changeActualOffer, changeOfferFavoriteStatus} from "../../actions/action-creators/offers";
 
-const OfferCard = ({
-  offer,
-  activeIndex,
-  onChangeActiveItem,
-  onChangeActualOffer,
-  isNeighbourMode,
-  onChangeOfferFavoriteStatus
-}) => {
+interface Props {
+  offer: Offer,
+  activeIndex: number,
+  onChangeActiveItem(id: number): void,
+  isNeighbourMode: boolean,
+  onChangeActualOffer(offerID: number): void,
+  onChangeOfferFavoriteStatus(id: number, status: number): void
+}
+
+const OfferCard: React.FC<Props> = (props: Props) => {
+  const {
+    offer,
+    activeIndex,
+    onChangeActiveItem,
+    onChangeActualOffer,
+    isNeighbourMode,
+    onChangeOfferFavoriteStatus
+  } = props;
+
   const {
     id,
     title,
@@ -91,15 +101,6 @@ const OfferCard = ({
       </div>
     </article>
   );
-};
-
-OfferCard.propTypes = {
-  offer: PropValidator.OFFER,
-  activeIndex: PropTypes.number.isRequired,
-  onChangeActiveItem: PropTypes.func.isRequired,
-  isNeighbourMode: PropTypes.bool.isRequired,
-  onChangeActualOffer: PropTypes.func.isRequired,
-  onChangeOfferFavoriteStatus: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({

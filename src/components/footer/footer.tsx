@@ -1,9 +1,13 @@
-import React from "react";
+import * as React from "react";
 import {Link} from "react-router-dom";
-import {PropTypes} from "prop-types";
-import {Routes} from "../../consts.js";
+import {Routes} from "../../consts";
 
-const Footer = ({styles = {}}) => {
+type Props = {
+  styles?: object
+}
+
+const Footer: React.FC<Props> = (props: Props) => {
+  const {styles = {}} = props;
   return (
     <footer style={styles} className="footer container">
       <Link className="footer__logo-link" to={Routes.MAIN}>
@@ -11,10 +15,6 @@ const Footer = ({styles = {}}) => {
       </Link>
     </footer>
   );
-};
-
-Footer.propTypes = {
-  styles: PropTypes.object
 };
 
 export default Footer;

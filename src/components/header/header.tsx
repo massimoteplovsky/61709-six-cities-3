@@ -1,17 +1,23 @@
-import React from "react";
+import * as React from "react";
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import {getAuthStatus, getUserInfo} from "../../selectors/user.js";
+import {getAuthStatus, getUserInfo} from "../../selectors/user";
 import {Authorization} from "../../consts";
-import {PropTypes} from "prop-types";
-import {BASE_URL} from "../../consts.js";
-import {PropValidator} from "../../prop-validator/prop-validator.js";
-import {Routes} from "../../consts.js";
+import {BASE_URL} from "../../consts";
+import {UserInfo} from "../../prop-validator/prop-validator";
+import {Routes} from "../../consts";
 
-const Header = ({
-  authStatus,
-  userInfo
-}) => {
+interface Props {
+  authStatus: string,
+  userInfo: UserInfo
+}
+
+const Header: React.FC<Props> = (props: Props) => {
+  const {
+    authStatus,
+    userInfo
+  } = props;
+
   return (
     <header className="header">
       <div className="container">
@@ -52,11 +58,6 @@ const Header = ({
       </div>
     </header>
   );
-};
-
-Header.propTypes = {
-  authStatus: PropTypes.string.isRequired,
-  userInfo: PropValidator.USER_INFO
 };
 
 const mapStateToProps = (state) => ({

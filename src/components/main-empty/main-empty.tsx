@@ -1,18 +1,25 @@
-import React from "react";
+import * as React from "react";
 import {connect} from "react-redux";
-import {PropValidator} from "../../prop-validator/prop-validator.js";
-import {PropTypes} from "prop-types";
-import {getAllOffers, getActualCity} from "../../selectors/offers.js";
-import Header from "../header/header.jsx";
-import CityList from "../city-list/city-list.jsx";
-import withActiveItem from "../../hoc/with-active-item/with-active-item.js";
+import {Offer} from "../../prop-validator/prop-validator";
+import {getAllOffers, getActualCity} from "../../selectors/offers";
+import Header from "../header/header";
+import CityList from "../city-list/city-list";
+import withActiveItem from "../../hoc/with-active-item/with-active-item";
 
 const WrappedCityList = withActiveItem(CityList);
 
-const MainEmpty = ({
-  offers,
-  actualCity
-}) => {
+interface Props {
+  offers: Offer[],
+  actualCity: string
+}
+
+const MainEmpty: React.FC<Props> = (props: Props) => {
+
+  const {
+    offers,
+    actualCity
+  } = props;
+
   return (
     <div className="page page--gray page--main">
       <Header/>
@@ -33,11 +40,6 @@ const MainEmpty = ({
       </main>
     </div>
   );
-};
-
-MainEmpty.propTypes = {
-  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  actualCity: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({

@@ -1,21 +1,32 @@
-import React, {PureComponent} from 'react';
-import {PropValidator} from '../../prop-validator/prop-validator.js';
-import {PropTypes} from "prop-types";
+import * as React from "react";
+import {Offer as OfferInterface, Review} from '../../prop-validator/prop-validator';
 import {connect} from "react-redux";
 import {makeRating, shuffleArray} from '../../helpers';
-import {getOffer, getOfferReviews, getNeighbourPlaces} from '../../selectors/offers.js';
-import {getAuthStatus} from "../../selectors/user.js";
-import {loadOfferReviews, loadNeighbourPlaces, changeOfferFavoriteStatus} from "../../actions/action-creators/offers.js";
-import Header from "../header/header.jsx";
-import Reviews from "../reviews/reviews.jsx";
-import OfferList from "../offer-list/offer-list.jsx";
-import Map from "../map/map.jsx";
-import Loading from "../loading/loading.jsx";
-import Footer from "../footer/footer.jsx";
-import withLoading from "../../hoc/with-loading/with-loading.js";
-import history from "../../history.js";
+import {getOffer, getOfferReviews, getNeighbourPlaces} from '../../selectors/offers';
+import {getAuthStatus} from "../../selectors/user";
+import {loadOfferReviews, loadNeighbourPlaces, changeOfferFavoriteStatus} from "../../actions/action-creators/offers";
+import Header from "../header/header";
+import Reviews from "../reviews/reviews";
+import OfferList from "../offer-list/offer-list";
+import Map from "../map/map";
+import Loading from "../loading/loading";
+import Footer from "../footer/footer";
+import withLoading from "../../hoc/with-loading/with-loading";
+import history from "../../history";
 
-class Offer extends PureComponent {
+interface Props {
+  offer: OfferInterface,
+  match: any,
+  reviews: Review[],
+  neighbourPlaces: OfferInterface[],
+  isLoading: boolean,
+  onChangeLoadingStatus(status: boolean, cb?: () => void): void,
+  onLoadData(id: number): Promise<Array<string>>,
+  authStatus: string,
+  onChangeOfferFavoriteStatus(id: number, status: number): void
+}
+
+class Offer extends React.PureComponent<Props> {
   constructor(props) {
     super(props);
   }
@@ -231,18 +242,6 @@ class Offer extends PureComponent {
     );
   }
 }
-
-Offer.propTypes = {
-  offer: PropValidator.OFFER,
-  match: PropTypes.object,
-  reviews: PropTypes.arrayOf(PropValidator.REVIEW).isRequired,
-  neighbourPlaces: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  onChangeLoadingStatus: PropTypes.func.isRequired,
-  onLoadData: PropTypes.func.isRequired,
-  authStatus: PropTypes.string.isRequired,
-  onChangeOfferFavoriteStatus: PropTypes.func.isRequired
-};
 
 const mapStateToProps = (state, ownProps) => ({
   offer: getOffer(state, ownProps.match.params.id),

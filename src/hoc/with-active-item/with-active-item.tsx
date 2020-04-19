@@ -1,7 +1,14 @@
-import React, {PureComponent} from "react";
+import * as React from "react";
+
+interface State {
+  activeIndex: number
+}
 
 const withActiveItem = (Component) => {
-  class WithActiveItem extends PureComponent {
+
+  type ComponentProps = React.ComponentProps<typeof Component>;
+
+  class WithActiveItem extends React.PureComponent<ComponentProps, State> {
     constructor(props) {
       super(props);
 
@@ -12,7 +19,7 @@ const withActiveItem = (Component) => {
       this.handleChangeActiveItem = this.handleChangeActiveItem.bind(this);
     }
 
-    handleChangeActiveItem(index) {
+    handleChangeActiveItem(index: number): void {
       this.setState({activeIndex: index});
     }
 

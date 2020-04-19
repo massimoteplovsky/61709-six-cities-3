@@ -1,19 +1,34 @@
-import React, {Fragment} from "react";
-import {PropTypes} from "prop-types";
+import * as React from "react";
 import {connect} from "react-redux";
-import {sendReview} from "../../actions/action-creators/offers.js";
-import {makeTitle} from "../../helpers.js";
-import withForm from "../../hoc/with-form/with-form.js";
+import {sendReview} from "../../actions/action-creators/offers";
+import {makeTitle} from "../../helpers";
+import withForm from "../../hoc/with-form/with-form";
 
-const FormReview = ({
-  offerID,
-  isFormValid,
-  isFormSent,
-  onFormSubmit,
-  onChangeField,
-  onSendForm,
-  formFields
-}) => {
+interface Props {
+  offerID: number,
+  isFormValid: boolean,
+  isFormSent: boolean,
+  onFormSubmit(event: React.SyntheticEvent, onSendForm: (offerID: number) => void, fields: string[]): void,
+  onChangeField(event: React.SyntheticEvent, fields: string[]): void,
+  onSendForm(offerID: number): () => void,
+  formFields: {
+    [field: string]: {
+      value: string;
+    }
+  }
+}
+
+const FormReview: React.FC<Props> = (props: Props) => {
+  const {
+    offerID,
+    isFormValid,
+    isFormSent,
+    onFormSubmit,
+    onChangeField,
+    onSendForm,
+    formFields
+  } = props;
+
   const starRating = new Array(5).fill(``).map((_, index) => index + 1).reverse();
   const fields = [`rating`, `comment`];
 
@@ -29,7 +44,7 @@ const FormReview = ({
         {
           starRating.map((star) => {
             return (
-              <Fragment key={star}>
+              <React.Fragment key={star}>
                 <input
                   className="form__rating-input visually-hidden"
                   name="rating"
@@ -49,7 +64,7 @@ const FormReview = ({
                     <use xlinkHref="#icon-star"></use>
                   </svg>
                 </label>
-              </Fragment>
+              </React.Fragment>
             );
           })
         }
@@ -77,16 +92,6 @@ const FormReview = ({
       </div>
     </form>
   );
-};
-
-FormReview.propTypes = {
-  offerID: PropTypes.number.isRequired,
-  isFormValid: PropTypes.bool.isRequired,
-  isFormSent: PropTypes.bool.isRequired,
-  onFormSubmit: PropTypes.func.isRequired,
-  onChangeField: PropTypes.func.isRequired,
-  onSendForm: PropTypes.func.isRequired,
-  formFields: PropTypes.object.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({

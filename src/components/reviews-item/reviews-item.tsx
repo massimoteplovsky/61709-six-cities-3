@@ -1,19 +1,25 @@
-import React from "react";
-import {makeRating, getFormatDate} from "../../helpers.js";
-import {PropValidator} from "../../prop-validator/prop-validator.js";
+import * as React from "react";
+import {makeRating, getFormatDate} from "../../helpers";
+import {Review} from "../../prop-validator/prop-validator";
 
-const ReviewsItem = ({review}) => {
+interface Props {
+  review: Review
+}
+
+const ReviewsItem: React.FC<Props> = (props: Props) => {
 
   const {
-    id,
-    rating,
-    comment,
-    date,
-    user: {
-      name,
-      avatarUrl
+    review: {
+      id,
+      rating,
+      comment,
+      date,
+      user: {
+        name,
+        avatarUrl
+      }
     }
-  } = review;
+  } = props;
 
   return (
     <li key={id} className="reviews__item">
@@ -41,10 +47,6 @@ const ReviewsItem = ({review}) => {
       </div>
     </li>
   );
-};
-
-ReviewsItem.propTypes = {
-  review: PropValidator.REVIEW
 };
 
 export default ReviewsItem;

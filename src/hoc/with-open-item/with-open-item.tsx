@@ -1,7 +1,11 @@
-import React, {PureComponent} from "react";
+import * as React from "react";
+
+interface State {
+  isOpen: boolean
+}
 
 const withOpenItem = (Component) => {
-  class WithOpenItem extends PureComponent {
+  class WithOpenItem extends React.PureComponent<{}, State> {
     constructor(props) {
       super(props);
 

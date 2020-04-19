@@ -1,7 +1,11 @@
-import React, {PureComponent} from "react";
+import * as React from "react";
+
+interface State {
+  loading: boolean
+}
 
 const withLoading = (Component) => {
-  class WithLoading extends PureComponent {
+  class WithLoading extends React.PureComponent<{}, State> {
     constructor(props) {
       super(props);
 
@@ -12,7 +16,7 @@ const withLoading = (Component) => {
       this.handleChangeStatus = this.handleChangeStatus.bind(this);
     }
 
-    handleChangeStatus(status, cb) {
+    handleChangeStatus(status: boolean, cb: () => void) {
       this.setState({loading: status}, () => {
         if (typeof cb === `function`) {
           cb();

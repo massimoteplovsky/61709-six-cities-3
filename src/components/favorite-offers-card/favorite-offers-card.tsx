@@ -1,17 +1,27 @@
-import React from "react";
+import * as React from "react";
 import {Link} from "react-router-dom";
-import {makeRating} from "../../helpers.js";
-import {changeOfferFavoriteStatus, changeActualCity} from "../../actions/action-creators/offers.js";
+import {makeRating} from "../../helpers";
+import {Offer} from "../../prop-validator/prop-validator";
+import {changeOfferFavoriteStatus, changeActualCity} from "../../actions/action-creators/offers";
 import {connect} from "react-redux";
-import {PropTypes} from "prop-types";
-import history from "../../history.js";
+import history from "../../history";
 
-const FavoriteOfferCard = ({
-  cities,
-  favoriteOffers,
-  onChangeOfferFavoriteStatus,
-  onChangeActualCity
-}) => {
+interface Props {
+  cities: string[],
+  favoriteOffers: Offer[],
+  onChangeOfferFavoriteStatus: (id: number, status: number) => void,
+  onChangeActualCity(city: string): void
+}
+
+const FavoriteOfferCard: React.FC<Props> = (props: Props) => {
+
+  const {
+    cities,
+    favoriteOffers,
+    onChangeOfferFavoriteStatus,
+    onChangeActualCity
+  } = props;
+
   return (
     <div className="page__favorites-container container">
       <section className="favorites">
@@ -115,13 +125,6 @@ const FavoriteOfferCard = ({
       </section>
     </div>
   );
-};
-
-FavoriteOfferCard.propTypes = {
-  cities: PropTypes.array.isRequired,
-  favoriteOffers: PropTypes.array.isRequired,
-  onChangeOfferFavoriteStatus: PropTypes.func.isRequired,
-  onChangeActualCity: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({

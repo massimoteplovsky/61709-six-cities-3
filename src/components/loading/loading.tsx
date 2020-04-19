@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 
-const Loading = () => {
+const Loading: React.FC = () => {
   return (
     <div style={{
       display: `flex`,

@@ -1,18 +1,23 @@
-import React from "react";
-import {PropValidator} from "../../prop-validator/prop-validator.js";
-import PropTypes from "prop-types";
+import * as React from "react";
+import {Offer} from "../../prop-validator/prop-validator";
 import {connect} from "react-redux";
-import {makeCityList} from "../../helpers.js";
-import {changeActualCity} from "../../actions/action-creators/offers.js";
-import CityListItem from "../city-list-item/city-list-item.js";
-import {getActualCity} from "../../selectors/offers.js";
+import {makeCityList} from "../../helpers";
+import {changeActualCity} from "../../actions/action-creators/offers";
+import CityListItem from "../city-list-item/city-list-item";
+import {getActualCity} from "../../selectors/offers";
 
+interface Props {
+  offers: Offer[],
+  actualCity: string,
+  onChangeActualCity(city: string): void;
+}
 
-const CityList = ({
-  offers,
-  actualCity,
-  onChangeActualCity,
-}) => {
+const CityList: React.FC<Props> = (props: Props) => {
+  const {
+    offers,
+    actualCity,
+    onChangeActualCity,
+  } = props;
   const cities = makeCityList(offers);
 
   return (
@@ -37,19 +42,13 @@ const CityList = ({
   );
 };
 
-CityList.propTypes = {
-  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  onChangeActualCity: PropTypes.func.isRequired,
-  actualCity: PropTypes.string.isRequired
-};
-
 const mapStateToProps = (state) => ({
   actualCity: getActualCity(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onChangeActualCity(city) {
+    onChangeActualCity(city: string): void {
       dispatch(changeActualCity(city));
     }
   };

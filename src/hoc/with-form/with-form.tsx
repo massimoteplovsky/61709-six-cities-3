@@ -1,7 +1,30 @@
-import React, {PureComponent} from "react";
+import * as React from "react";
+
+interface State {
+  formError: boolean,
+  formErrorData: {
+    fieldName: string,
+    message: string
+  }[],
+  formFields: {
+    [field: string]: {
+      value: string;
+      validation: {
+        required: boolean,
+        email?: boolean,
+        minLength?: number
+        length?: number[]
+      },
+      errorMessage: string,
+      isValid: boolean
+    }
+  }
+  isFormValid: boolean,
+  isFormSent: boolean
+}
 
 const withForm = (Component) => {
-  class WithForm extends PureComponent {
+  class WithForm extends React.PureComponent<{}, State> {
     constructor(props) {
       super(props);
 
@@ -60,7 +83,7 @@ const withForm = (Component) => {
     }
 
     validate(element) {
-      let error = [true, null];
+      let error = [true, ``];
 
       if (element.validation.required) {
         let valid = element.value.trim() !== ``;
@@ -98,14 +121,14 @@ const withForm = (Component) => {
       return error;
     }
 
-    handleFieldChange(event, fields) {
+    handleFieldChange(event, fields: string[]) {
       const target = event.target;
       const newFormFields = Object.assign({}, this.state.formFields);
       const newField = newFormFields[target.name];
       newField.value = target.value;
       let [valid, message] = this.validate(newField);
-      newField.isValid = valid;
-      newField.errorMessage = message;
+      newField.isValid = !!valid;
+      newField.errorMessage = message.toString();
       newFormFields[target.name] = newField;
 
       this.setState({
@@ -252,9 +275,9 @@ const withForm = (Component) => {
           isFormSent={isFormSent}
           formError={formError}
           formErrorData={formErrorData}
-          showErrors={this.showErrors}
-          addErrorClass={this.addErrorClass}
           formFields={formFields}
+          onShowErrors={this.showErrors}
+          onAddErrorClass={this.addErrorClass}
           onFormSubmit={this.handleFormSubmit}
           onChangeField={this.handleFieldChange}
         />

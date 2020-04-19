@@ -1,9 +1,15 @@
-import React from "react";
-import {changeActualFilter} from "../../actions/action-creators/offers.js";
+import * as React from "react";
+import {changeActualFilter} from "../../actions/action-creators/offers";
 import {connect} from "react-redux";
-import {PropTypes} from "prop-types";
-import withActiveItem from "../../hoc/with-active-item/with-active-item.js";
+import withActiveItem from "../../hoc/with-active-item/with-active-item";
 
+interface Props {
+  activeIndex: number,
+  onChangeActiveItem(index: number): void,
+  isOpen: boolean,
+  onToggleOpenMode(isOpen: boolean): void,
+  onChangeActualFilter(type: string): void
+}
 
 const sortTypes = [
   `Popular`,
@@ -12,13 +18,14 @@ const sortTypes = [
   `Top rated first`
 ];
 
-const Sorting = ({
-  activeIndex,
-  onChangeActiveItem,
-  isOpen,
-  onToggleOpenMode,
-  onChangeActualFilter
-}) => {
+const Sorting: React.FC<Props> = (props: Props) => {
+  const {
+    activeIndex,
+    onChangeActiveItem,
+    isOpen,
+    onToggleOpenMode,
+    onChangeActualFilter
+  } = props;
   return (
     <ul className={`places__options places__options--custom ${isOpen ? `places__options--opened` : ``}`}>
       {
@@ -27,7 +34,7 @@ const Sorting = ({
             <li
               key={index}
               className={`places__option ${activeIndex === index ? `places__option--active` : ``}`}
-              tabIndex="0"
+              tabIndex={0}
               onClick={() => {
                 onChangeActiveItem(index);
                 onToggleOpenMode(!isOpen);
@@ -41,14 +48,6 @@ const Sorting = ({
       }
     </ul>
   );
-};
-
-Sorting.propTypes = {
-  activeIndex: PropTypes.number.isRequired,
-  onChangeActiveItem: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onToggleOpenMode: PropTypes.func.isRequired,
-  onChangeActualFilter: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (dispatch) => ({

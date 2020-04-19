@@ -23,7 +23,6 @@ export const checkAuth = () => (dispatch, _, api) => {
       if (res.status === 200) {
         dispatch(requireAuthorization(Authorization.AUTH));
         dispatch(saveUserInfoToState(res.data));
-        dispatch(loadFavoriteOffers());
       }
     });
 };
@@ -31,10 +30,11 @@ export const checkAuth = () => (dispatch, _, api) => {
 export const login = (formData) => (dispatch, _, api) => {
   api.post(`/login`, formData)
     .then((res) => {
-      dispatch(requireAuthorization(Authorization.AUTH));
-      dispatch(loadFavoriteOffers());
-      dispatch(saveUserInfoToState(res.data));
-      dispatch(loadAllOffers());
-      history.push(Routes.MAIN);
+      if (res.status === 200) {
+        dispatch(requireAuthorization(Authorization.AUTH));
+        dispatch(saveUserInfoToState(res.data));
+        dispatch(loadAllOffers());
+        history.push(Routes.MAIN);
+      }
     });
 };

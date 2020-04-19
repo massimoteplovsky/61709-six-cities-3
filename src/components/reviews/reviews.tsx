@@ -1,16 +1,23 @@
-import React from "react";
-import FormReview from "../form-review/form-review.jsx";
-import {PropValidator} from "../../prop-validator/prop-validator.js";
-import {PropTypes, string} from "prop-types";
-import {sortByDate} from "../../helpers.js";
-import ReviewsItem from "../reviews-item/reviews-item.js";
-import {Authorization} from "../../consts.js";
+import * as React from "react";
+import FormReview from "../form-review/form-review";
+import {Review} from "../../prop-validator/prop-validator";
+import {sortByDate} from "../../helpers";
+import ReviewsItem from "../reviews-item/reviews-item";
+import {Authorization} from "../../consts";
 
-const Reviews = ({
-  reviews,
-  authStatus,
-  offerID
-}) => {
+interface Props {
+  reviews: Review[],
+  authStatus: string,
+  offerID: number
+}
+
+const Reviews: React.FC<Props> = (props: Props) => {
+
+  const {
+    reviews,
+    authStatus,
+    offerID
+  } = props;
 
   return (
     <section className="property__reviews reviews">
@@ -39,12 +46,6 @@ const Reviews = ({
       {authStatus === Authorization.AUTH ? <FormReview offerID={offerID}/> : null}
     </section>
   );
-};
-
-Reviews.propTypes = {
-  reviews: PropTypes.arrayOf(PropValidator.REVIEW).isRequired,
-  authStatus: string.isRequired,
-  offerID: PropTypes.number.isRequired
 };
 
 export default Reviews;

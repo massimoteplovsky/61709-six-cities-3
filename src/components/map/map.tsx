@@ -1,7 +1,11 @@
-import React, {PureComponent, createRef} from "react";
-import {PropValidator} from '../../prop-validator/prop-validator';
-import {PropTypes} from "prop-types";
-import leaflet from "leaflet";
+import * as React from "react";
+import {Offer} from '../../prop-validator/prop-validator';
+import * as leaflet from "leaflet";
+
+interface Props {
+  offers: Offer[],
+  actualOfferID: number
+}
 
 const icon = leaflet.icon({
   iconUrl: `img/pin.svg`,
@@ -12,12 +16,18 @@ const activeIcon = leaflet.icon({
   iconSize: [30, 30]
 });
 
-class Map extends PureComponent {
+class Map extends React.PureComponent<Props, {}> {
+
+  private _mapContainer: React.RefObject<HTMLDivElement>;
+  private _map: any;
+  private _markers: any;
+
   constructor(props) {
     super(props);
 
-    this._mapContainer = createRef();
+    this._mapContainer = React.createRef();
     this._map = null;
+    this._markers = null;
   }
 
   componentDidMount() {
@@ -38,11 +48,11 @@ class Map extends PureComponent {
       }
     } = offers[0];
 
-    this.markers = leaflet.layerGroup();
+    this._markers = leaflet.layerGroup();
 
     this._map = leaflet.map(container, {
       zoomControl: false,
-      marker: true
+      //marker: true
     });
 
     leaflet
@@ -76,7 +86,7 @@ class Map extends PureComponent {
     } = offers[0];
 
     if (prevProps.offers !== offers || prevProps.actualOfferID !== actualOfferID) {
-      this.markers.clearLayers();
+      this._markers.clearLayers();
       this._map.setView([latitude, longitude], zoom);
       this.showMarkers(offers, actualOfferID);
     }
@@ -91,13 +101,13 @@ class Map extends PureComponent {
 
   showMarkers(offers, actualOfferID) {
     offers.forEach(({title, location, id}) => {
-      this.markers.addLayer(
+      this._markers.addLayer(
           leaflet.marker(
               [location.latitude, location.longitude],
               id === actualOfferID ? {icon: activeIcon} : {icon}
           ).bindPopup(title)
       );
-      this.markers.addTo(this._map);
+      this._markers.addTo(this._map);
     });
   }
 
@@ -120,10 +130,5 @@ class Map extends PureComponent {
     );
   }
 }
-
-Map.propTypes = {
-  offers: PropTypes.arrayOf(PropValidator.OFFER).isRequired,
-  actualOfferID: PropTypes.number.isRequired
-};
 
 export default Map;
